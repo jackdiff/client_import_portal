@@ -32,6 +32,7 @@ class ImportController extends Controller
         $category_id = $request->get('category');
         $file = $request->file('fileImport');
         $fields = $request->get('fields');
+        $includeFirstRow = $request->get('includeFirstRow');
         $category = null;
         if($category_id) {
             $category = Category::find($category_id);
@@ -44,7 +45,7 @@ class ImportController extends Controller
                 'errors' => ['category' => __('Category not found')] 
             ]);
         }
-        $result = $this->customerService->import($file, $category, $fields);
+        $result = $this->customerService->import($file, $category, $fields, $includeFirstRow);
         return response()->json([
             'success' => true,
             'message' => __("Imported :total records", [ 'total' => $result])

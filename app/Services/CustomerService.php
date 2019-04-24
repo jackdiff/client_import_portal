@@ -37,7 +37,7 @@ class CustomerService implements CustomerServiceInterface
         ];
     }
 
-    public function import($file, $category, $fields) {
+    public function import($file, $category, $fields, $includeFirstRow) {
         $reader = new Xlsx();
         $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($file);
         $worksheets = $spreadsheet->getAllSheets();
@@ -52,7 +52,7 @@ class CustomerService implements CustomerServiceInterface
             }
             foreach ($ws->getRowIterator() as $row) {
                 $count++;
-                if($count <= 1) {
+                if($count <= 1 && boolval($includeFirstRow) !== true) {
                     //1st row is header
                     continue;
                 }

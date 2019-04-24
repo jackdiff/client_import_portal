@@ -115,7 +115,7 @@ class ImportStores {
     this.steps[2].completed = true;
     this.steps[3].disabled = false;
     try {
-      const response = yield this.submitUpload()
+      const response = yield this.submitUpload(form)
       if(response.data.success) {
         this.state = State.SUCCESS
         this.message = response.data.message
@@ -132,11 +132,12 @@ class ImportStores {
   })
 
   @action
-  submitUpload() {
+  submitUpload(form) {
     const data = new FormData()
     data.append('category', this.category)
     data.append('fileImport', this.fileImport.file)
     data.append('fields', JSON.stringify(this.fields))
+    data.append('includeFirstRow', form.includeFirstRow)
 
     let header = makeDefaultHeader()
     return axios.post(api.IMPORT, data, {header});
