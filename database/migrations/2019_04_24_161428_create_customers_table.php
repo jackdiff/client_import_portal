@@ -24,6 +24,10 @@ class CreateCustomersTable extends Migration
             $table->string('position', 200);
             $table->string('website', 200);
             $table->string('city', 200);
+            $table->string('sheet_source', 40);
+            $table->bigInteger('category_id');
+            $table->index('category_id');
+            $table->index('name');
             $table->timestamps();
         });
     }

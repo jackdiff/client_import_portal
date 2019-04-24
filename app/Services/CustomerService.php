@@ -68,7 +68,7 @@ class CustomerService implements CustomerServiceInterface
                 }
                 if(!empty($line)) {
                     $line['category_id'] = $category->_id;
-                    $line['sheet'] = $sheet;
+                    $line['sheet_source'] = $sheet;
                     array_push($toSave, $line);
                 }
             }
