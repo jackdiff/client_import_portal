@@ -19,7 +19,7 @@ class ImportController extends Controller
         if(empty($format)) {
             return response()->json([
                 'success' => false,
-                'errors' => ['fileImport' => 'File empty'] 
+                'errors' => ['fileImport' => __('File empty')] 
             ]);
         }
         return response()->json([
@@ -41,9 +41,13 @@ class ImportController extends Controller
         if(empty($category) || empty($fields)) {
             return response()->json([
                 'success' => false,
-                'errors' => ['category' => 'Category not found'] 
+                'errors' => ['category' => __('Category not found')] 
             ]);
         }
-        $this->customerService->import($file, $category, $fields);
+        $result = $this->customerService->import($file, $category, $fields);
+        return response()->json([
+            'success' => true,
+            'message' => __("Imported :total records", [ 'total' => $result])
+        ]);
     }
 }

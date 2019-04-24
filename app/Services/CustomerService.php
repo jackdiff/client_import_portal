@@ -74,9 +74,12 @@ class CustomerService implements CustomerServiceInterface
                 }
             }
         }
+        $record_count = 0;
         if(!empty($toSave)) {
             Customer::insert($toSave);
+            $record_count = count($toSave);
         }
+        return $record_count;
     }
 
     public function list($params) {

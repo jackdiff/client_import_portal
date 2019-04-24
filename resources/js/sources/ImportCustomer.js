@@ -1,8 +1,9 @@
 import React, { Component, Fragment } from 'react'
-import { Form, Step } from 'semantic-ui-react'
+import { Form, Step, Progress } from 'semantic-ui-react'
 import { observer } from "mobx-react"
 import StoreContext from 'store/Context'
 import ImportFile from 'elements/ImportFile'
+import ImportProgress from 'elements/ImportProgress'
 import FormatStructure from 'elements/FormatStructure'
 
 @observer 
@@ -31,19 +32,19 @@ export default class ImportCustomer extends Component {
           <Step name={2} onClick={this.handleStep} active={this.context.importStore.step == 2} completed={this.context.importStore.steps[2].completed} disabled={this.context.importStore.steps[2].disabled}>
             <Step.Content>
               <Step.Title>FORMAT</Step.Title>
-              <Step.Description>Format nội dung upload </Step.Description>
+              <Step.Description>Select asociated field and actual data </Step.Description>
             </Step.Content>
           </Step>
 
           <Step name={3} onClick={this.handleStep} active={this.context.importStore.step == 3} completed={this.context.importStore.steps[3].completed} disabled={this.context.importStore.steps[3].disabled}>
             <Step.Content>
-              <Step.Title>Process</Step.Title>
+              <Step.Title>DONE</Step.Title>
             </Step.Content>
           </Step>
         </Step.Group>
         { this.context.importStore.step ==1 && <ImportFile/> }
         { this.context.importStore.step ==2 && <FormatStructure/>}
-        { this.context.importStore.step ==3 && <h3>DONE!</h3>}
+        { this.context.importStore.step ==3 && <ImportProgress />}
       </Fragment>
     )
   }

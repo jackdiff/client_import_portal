@@ -3,6 +3,11 @@ import axios from 'axios'
 import api, {makeDefaultHeader} from 'config/api'
 import State from 'config/state'
 
+const initialSteps = {
+  1: {completed: false, disabled: false},
+  2: {completed: false, disabled: true},
+  3: {completed: false, disabled: true}
+}
 class ImportStores {
   @observable state = State.IDLE //0/1/2/3
   @observable error = {}
@@ -10,12 +15,9 @@ class ImportStores {
   @observable fields = {}
   @observable fileImport = {}
   @observable category = ''
+  @observable message = ''
   @observable step = 1
-  @observable steps = {
-    1: {completed: false, disabled: false},
-    2: {completed: false, disabled: true},
-    3: {completed: false, disabled: true}
-  }
+  @observable steps = initialSteps
 
   @computed
   get getError() {
@@ -25,6 +27,18 @@ class ImportStores {
   @action
   setStep(step) {
     this.step = step
+  }
+
+  @action
+  reset() {
+    this.step = 1;
+    this.steps = initialSteps;
+    this.error = {}
+    this.format = []
+    this.category = ''
+    this.fileImport = {}
+    this.fields = {}
+    this.message = ''
   }
 
   getStructure(sheet) {
@@ -97,18 +111,15 @@ class ImportStores {
   @action
   upload = flow(function * (form) {
     this.state = State.FETCHING
+    this.step = 3;
+    this.steps[2].completed = true;
+    this.steps[3].disabled = false;
     try {
       const response = yield this.submitUpload()
       if(response.data.success) {
         this.state = State.SUCCESS
-        this.fileImport = {}
-        this.category = ''
-        this.format = []
-        this.fields = []
-        this.step = 3;
-        this.steps[2].completed = true;
-        this.steps[3].disabled = false;
-        this.error = []
+        this.message = response.data.message
+        // this.reset()
       } else {
         this.state = State.ERROR
         this.error = response.data.errors
