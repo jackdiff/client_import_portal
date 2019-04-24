@@ -40,7 +40,7 @@ class AppServiceProvider extends ServiceProvider
                 'application/vnd.ms-excel', // xls
                 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // xlsx
             ];
-            return in_array($value->getMimeType(), $allowed_mimes);
+            return $value && in_array($value->getMimeType(), $allowed_mimes);
         });
 
     }

@@ -25,7 +25,7 @@ class HomeController extends Controller
       $address = $request->query('address');
       $tel = $request->query('tel');
 
-      $query = DB::collection('customers');
+      $query = DB::table('customers');
       if(!empty($category)) {
         $query->where('category_id', $category);
       }
@@ -39,7 +39,6 @@ class HomeController extends Controller
        $query->where('tel', 'like', "%$tel%");  
       }
       $data = $query->paginate(25);
-      // $data = Customer::paginate(25);
       return response()->json([
           'success' => true,
           'customer' => $data,

@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react'
-import { Form, Input, Icon } from 'semantic-ui-react'
+import { Form, Input, Icon, Message } from 'semantic-ui-react'
 import { observable, action } from "mobx"
 import { observer } from "mobx-react"
 import StoreContext from 'store/Context'
@@ -68,10 +68,15 @@ export default class ImportFile extends Component {
 
   render() {
     return (
-      <Form loading={this.context.importStore.state == State.FETCHING || this.context.categoryStore.state == State.FETCHING}>
+      <Fragment>
+      <Form error loading={this.context.importStore.state == State.FETCHING || this.context.categoryStore.state == State.FETCHING}>
         <Form.Group widths='equal'>
           <Form.Select value={this.state.category} onChange={this.handleCategory} fluid label='Danh mục khách hàng' options={this.context.categoryStore.options} placeholder='-' />
         </Form.Group>
+        {this.context.importStore.error.category && <Message
+          error
+          content={this.context.importStore.error.category}
+        />}
         <Form.Group inline>
           <Form.Field>
             <label htmlFor="file">
@@ -82,8 +87,17 @@ export default class ImportFile extends Component {
             <Input id='file' style={{display: 'none'}} type='file' onChange={this.handleFile}/>
           </Form.Field>
         </Form.Group>
+        {this.context.importStore.error.fileImport && <Message
+          error
+          content={this.context.importStore.error.fileImport}
+        />}
         <Form.Button primary onClick={this.handleSubmit}>Submit</Form.Button>
+        {this.context.importStore.error.common && <Message
+          error
+          content={this.context.importStore.error.common}
+        />}
       </Form>
+      </Fragment>
     )
   }
 }

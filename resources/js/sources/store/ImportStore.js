@@ -46,12 +46,20 @@ class ImportStores {
 
   @action
   fetchStructure = flow(function * (form) {
+    if(!form.category) {
+      this.error = {'category' : 'No category selected'}
+      return
+    }
+    if(!form.fileImport) {
+      this.error = {'fileImport' : 'No file selected'}
+      return
+    }
     this.format = []
     this.fields = {}
     this.state = State.FETCHING
     try {
       const response = yield this.fetchStructureAPI(form)
-      if(response.status == 200) {
+      if(response.data.success) {
         this.state = State.SUCCESS
         this.fileImport = form.fileImport
         this.category = form.category
@@ -74,8 +82,13 @@ class ImportStores {
   @action
   fetchStructureAPI(form) {
     const data = new FormData()
-    data.append('category', form.category)
-    data.append('fileImport', form.fileImport.file)
+    if(form.category) {
+      data.append('category', form.category)
+    }
+    if(form.fileImport.file) {
+      data.append('fileImport', form.fileImport.file)
+    }
+    
 
     let header = makeDefaultHeader()
     return axios.post(api.ANALYZE_STRUCTURE, data, {header})
@@ -86,7 +99,7 @@ class ImportStores {
     this.state = State.FETCHING
     try {
       const response = yield this.submitUpload()
-      if(response.status == 200) {
+      if(response.data.success) {
         this.state = State.SUCCESS
         this.fileImport = {}
         this.category = ''
