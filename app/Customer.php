@@ -2,9 +2,8 @@
 
 namespace App;
 
-use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
+use Illuminate\Database\Eloquent\Model;
 
-class Customer extends Eloquent {
-    protected $collection = 'customers';
+class Customer extends Model {
 
 }

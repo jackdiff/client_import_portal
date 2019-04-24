@@ -28,8 +28,8 @@ class StoreCategory extends AppBaseRequest
 
     public function messages() {
         return [
-        'name.required' => 'Tên danh mục không được trống',
-        'name.max'  => 'Tên danh mục không được quá 200 kí tự',
+        'name.required' => __('Tên danh mục không được trống'),
+        'name.max'  => __('Tên danh mục không được quá 200 kí tự'),
     ];
     }
 }
