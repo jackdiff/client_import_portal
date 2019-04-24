@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\DB;
 use App\ServiceInterfaces\CustomerServiceInterface;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 use App\Customer;
@@ -61,13 +62,13 @@ class CustomerService implements CustomerServiceInterface
                 $i = 0;
                 foreach ($cellIterator as $cell) {
                     $val = trim((string)$cell->getCalculatedValue());
-                    if(!empty(@$wsFields[$i]) && !empty($val)) {
-                        $line[@$wsFields[$i]] = $val;
+                    if(!empty(@$wsFields[$i])) {
+                        $line[@$wsFields[$i]] =  !empty($val) ? $val : null;
                     }
                     $i++;
                 }
                 if(!empty($line)) {
-                    $line['category_id'] = $category->_id;
+                    $line['category_id'] = $category->id;
                     $line['sheet_source'] = $sheet;
                     array_push($toSave, $line);
                 }
@@ -76,5 +77,22 @@ class CustomerService implements CustomerServiceInterface
         if(!empty($toSave)) {
             Customer::insert($toSave);
         }
+    }
+
+    public function list($params) {
+        $query = DB::table('customers');
+        if(!empty(@$params['category'])) {
+            $query->where('category_id', $params['category']);
+        }
+        if(!empty(@$params['name'])) {
+            $query->where('name', 'like', "%{$params['name']}%");
+        }
+        if(!empty(@$params['address'])) {
+            $query->where('address', 'like', "%{$params['address']}%"); 
+        }
+        if(!empty(@$params['tel'])) {
+            $query->where('tel', 'like', "%{$params['tel']}%");  
+        }
+        return $query->paginate(25);
     }
 }

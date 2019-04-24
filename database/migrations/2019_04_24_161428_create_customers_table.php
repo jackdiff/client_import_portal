@@ -15,15 +15,15 @@ class CreateCustomersTable extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name', 200);
-            $table->string('company', 200);
-            $table->string('address', 500);
-            $table->string('no', 200);
-            $table->string('tel', 200);
-            $table->string('mobile_tel', 200);
-            $table->string('position', 200);
-            $table->string('website', 200);
-            $table->string('city', 200);
+            $table->string('name', 200)->nullable(true);
+            $table->string('company', 200)->nullable(true);
+            $table->string('address', 500)->nullable(true);
+            $table->string('no', 200)->nullable(true);
+            $table->string('tel', 200)->nullable(true);
+            $table->string('mobile_tel', 200)->nullable(true);
+            $table->string('position', 200)->nullable(true);
+            $table->string('website', 200)->nullable(true);
+            $table->string('city', 200)->nullable(true);
             $table->string('sheet_source', 40);
             $table->bigInteger('category_id');
             $table->index('category_id');
