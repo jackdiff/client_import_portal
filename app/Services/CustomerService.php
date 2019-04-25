@@ -9,6 +9,8 @@ use App\Customer;
 
 class CustomerService implements CustomerServiceInterface
 {
+    public $PAGE_SIZE = 25;
+
     public function getFields() {
         return [
             'no' => 'No.',
@@ -38,7 +40,6 @@ class CustomerService implements CustomerServiceInterface
     }
 
     public function import($file, $category, $fields, $includeFirstRow) {
-        $reader = new Xlsx();
         $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($file);
         $worksheets = $spreadsheet->getAllSheets();
         $toSave = [];
@@ -96,6 +97,7 @@ class CustomerService implements CustomerServiceInterface
         if(!empty(@$params['tel'])) {
             $query->where('tel', 'like', "%{$params['tel']}%");  
         }
-        return $query->paginate(25);
+
+        return $query->paginate($this->PAGE_SIZE, ['*'], 'page', $params['page'])->toArray();
     }
 }

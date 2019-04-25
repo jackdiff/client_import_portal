@@ -23,8 +23,12 @@ class HomeController extends Controller
       $name = $request->query('name');
       $address = $request->query('address');
       $tel = $request->query('tel');
+      $page = $request->query('page');
+      if(!$page) {
+        $page = 1;
+      }
 
-      $data = $this->customerService->list(compact('category', 'name', 'address', 'tel'));
+      $data = $this->customerService->list(compact('category', 'name', 'address', 'tel', 'page'));
       return response()->json([
           'success' => true,
           'customer' => $data,
