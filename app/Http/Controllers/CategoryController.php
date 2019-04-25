@@ -14,16 +14,15 @@ class CategoryController extends Controller
     }
 
     public function index() {
-      $cate = Category::all();
-      return response()->json(['success' => true, 'categories' => $cate->toArray()]);
+      
+      return response()->json(['success' => true, 'categories' => $this->categoryService->all()]);
     }
 
     public function remove($id = null) {
       if(!$id) {
         return response()->json(['success' => false, 'errors' => ['common' => __('Err! Can not delete empty item')]]);
       }
-      $cate = Category::find($id);
-      $cate->delete();
+      $this->categoryService->delete($id);
       return response()->json(['success' => true]);
     }
 

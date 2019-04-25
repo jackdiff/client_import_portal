@@ -20,4 +20,14 @@ class CategoryService implements CategoryServiceInterface
         $new->save();
         return $new;
     }
+
+    public function delete($id) {
+        $cate = Category::find($id);
+        return $cate->delete();
+    }
+
+    public function all() {
+        $cates = Category::all();
+        return $cates->toArray();
+    }
 }
