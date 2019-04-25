@@ -20,10 +20,17 @@ It's features include : create Client Category, import excel file, filter custom
 - PHP extension php_zip enabled
 - PHP extension php_xml enabled
 - PHP extension php_gd2 enabled
+- Docker Engine 18.9 (or latest)
+- Docker Compose 1.23.2 (or latest)
 ## Clone project
 - `git clone git@github.com:jackdiff/client_import_portal.git`
 - `cd client_import_portal`
 - `git checkout v1.0`
+
+## Make env file
+- In project root directory: Rename file .env_test => .env  `cp .env_test .env`
+- `cd dockers`
+- In dockers directory : Rename file .env_test => .env `cp .env_test .env`
 ## Build docker workspace 
 
 This project is developed by using docker to create workspace. If you want to use docker, you need install docker and docker composer on your machine : [https://docs.docker.com/install/](https://docs.docker.com/install/)
@@ -43,10 +50,6 @@ In project  root directory, run commands :
 - Open hosts file (*nix os  : /etc/hosts)
 - Add : `127.0.0.1   cip.test`
 
-## Make env file
-- In project root directory: Rename file .env_test => .env  `cp .env_test .env`
-- `cd dockers`
-- In dockers directory : Rename file .env_test => .env `cp .env_test .env`
 ## Additional setting
 
 If you do not use docker, you may need some additional settings :
@@ -60,6 +63,13 @@ If you do not use docker, you may need some additional settings :
 
 ## TESTING
 - Visit http://cip.test:8088 to see the result.
+- Run unit test :
+  - Access to docker container : from project root directory, run commands:
+    - `cd dockers`
+    - `docker-compose exec workspace bash`
+  - In docker container worksapce, run command :
+    - `phpunit --testdox`
+  - Exit docker container by key : crtl + C or control + C
 # USER GUIDE
 
 1. Add category
