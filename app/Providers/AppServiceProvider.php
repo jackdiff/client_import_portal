@@ -8,6 +8,8 @@ use App\Services\FileImportService;
 use App\ServiceInterfaces\FileImportServiceInterface;
 use App\Services\CustomerService;
 use App\ServiceInterfaces\CustomerServiceInterface;
+use App\Services\CategoryService;
+use App\ServiceInterfaces\CategoryServiceInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,6 +27,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(
             CustomerServiceInterface::class,
             CustomerService::class
+        );
+        $this->app->singleton(
+            CategoryServiceInterface::class,
+            CategoryService::class
         );
     }
 
