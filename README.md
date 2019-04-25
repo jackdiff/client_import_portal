@@ -13,13 +13,17 @@ It's features include : create Client Category, import excel file, filter custom
 
 
 # Installation
+
 ## Requirement
 - PHP 7.2
 - MySQL 5.7.23
 - PHP extension php_zip enabled
 - PHP extension php_xml enabled
 - PHP extension php_gd2 enabled
-
+## Clone project
+- `git clone git@github.com:jackdiff/client_import_portal.git`
+- `cd client_import_portal`
+- `git checkout v1.0`
 ## Build docker workspace 
 
 This project is developed by using docker to create workspace. If you want to use docker, you need install docker and docker composer on your machine : [https://docs.docker.com/install/](https://docs.docker.com/install/)
