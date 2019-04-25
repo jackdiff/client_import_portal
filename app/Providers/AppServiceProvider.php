@@ -8,6 +8,8 @@ use App\Services\FileImportService;
 use App\ServiceInterfaces\FileImportServiceInterface;
 use App\Services\CustomerService;
 use App\ServiceInterfaces\CustomerServiceInterface;
+use App\Services\CategoryService;
+use App\ServiceInterfaces\CategoryServiceInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -26,6 +28,10 @@ class AppServiceProvider extends ServiceProvider
             CustomerServiceInterface::class,
             CustomerService::class
         );
+        $this->app->singleton(
+            CategoryServiceInterface::class,
+            CategoryService::class
+        );
     }
 
     /**
@@ -40,7 +46,7 @@ class AppServiceProvider extends ServiceProvider
                 'application/vnd.ms-excel', // xls
                 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // xlsx
             ];
-            return in_array($value->getMimeType(), $allowed_mimes);
+            return $value && in_array($value->getMimeType(), $allowed_mimes);
         });
 
     }

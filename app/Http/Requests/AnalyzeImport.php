@@ -28,8 +28,8 @@ class AnalyzeImport extends AppBaseRequest
 
     public function messages() {
         return [
-            'fileImport.required' => 'Không có file được chọn',
-            'fileImport.mimexls'  => 'Không phải là file excel',
+            'fileImport.required' => __('No file selected'),
+            'fileImport.mimexls'  => __('File is not excel format'),
         ];
     }
 }

@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react'
-import { Table, Select, Container, Button, Segment } from 'semantic-ui-react'
+import { Table, Select, Container, Button, Segment, Checkbox, Form } from 'semantic-ui-react'
 import { observer } from "mobx-react"
 import StoreContext from 'store/Context'
 import State from 'config/state'
@@ -10,8 +10,10 @@ export default class StructureTable extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      includeFirstRow: 0,
     }
     this.handleProcess = this.handleProcess.bind(this)
+    this.onIncludeFirstRowChange = this.onIncludeFirstRowChange.bind(this)
   }
 
   makeRow() {
@@ -35,8 +37,13 @@ export default class StructureTable extends Component {
     this.context.importStore.selectField(sheet, id, obj.value)
   }
 
+  onIncludeFirstRowChange(e, obj) {
+    this.setState({includeFirstRow: obj.checked ? 1 : 0})
+  }
+
   handleProcess() {
-    this.context.importStore.upload()
+    const includeFirstRow = this.state.includeFirstRow;
+    this.context.importStore.upload({includeFirstRow})
   }
 
   makeHeader() {
@@ -68,7 +75,8 @@ export default class StructureTable extends Component {
           </Table.Body>
         </Table>
         <Container>
-          <Button primary onClick={this.handleProcess} >Process</Button>
+          <Form.Field><Checkbox onChange={this.onIncludeFirstRowChange} label='Include first row ? (if it is not a header)' /></Form.Field>
+          <Form.Field><Button primary onClick={this.handleProcess} >Process</Button></Form.Field>
         </Container>
       </Segment>
     )

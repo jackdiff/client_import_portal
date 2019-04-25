@@ -37,7 +37,6 @@ class CustomerStores {
   }
 
   getStyle(field) {
-    console.log(field, this.fieldStyles[field])
     return this.fieldStyles[field]
   }
 

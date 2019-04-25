@@ -23,12 +23,12 @@ class CategoryStores {
 
   @action
   addCategory(category) {
-    this.categories.push(new CategoryModel(category._id, category.name));
+    this.categories.push(new CategoryModel(category.id, category.name));
   }
 
   @action
   updateCategory(category) {
-    const uIx = this.categories.findIndex(el => el.id == category._id)
+    const uIx = this.categories.findIndex(el => el.id == category.id)
     if(uIx >= 0) this.categories[uIx].name = category.name
   }
 
@@ -62,7 +62,7 @@ class CategoryStores {
       const response = yield this.fetchLoadAll()
       if(response.data.success) {
         this.state = State.SUCCESS
-        const cates = response.data.categories.map((category) => new CategoryModel(category._id, category.name))
+        const cates = response.data.categories.map((category) => new CategoryModel(category.id, category.name))
         this.categories = cates
       } else {
         this.state = State.ERROR
