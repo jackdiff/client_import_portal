@@ -27,12 +27,12 @@ It's features include : create Client Category, import excel file, filter custom
 ## Build docker workspace 
 
 This project is developed by using docker to create workspace. If you want to use docker, you need install docker and docker composer on your machine : [https://docs.docker.com/install/](https://docs.docker.com/install/)
-After docker and docker composer installed, In root project directory, run commands : 
+After docker and docker composer installed, In project root directory, run commands : 
 - `cd dockers/`
 - `docker-compose up -d --build nginx php-fpm mysql workspace`
 
 ## Install dependencies && create database
-In root project directory, run commands : 
+In project  root directory, run commands : 
 - `cd dockers/`
 - `docker-compose exec workspace composer install`
 - `docker-compose exec workspace php artisan migrate`
@@ -43,6 +43,10 @@ In root project directory, run commands :
 - Open hosts file (*nix os  : /etc/hosts)
 - Add : `127.0.0.1   cip.test`
 
+## Make env file
+- In project root directory: Rename file .env_test => .env  `cp .env_test .env`
+- `cd dockers`
+- In dockers directory : Rename file .env_test => .env `cp .env_test .env`
 ## Additional setting
 
 If you do not use docker, you may need some additional settings :
