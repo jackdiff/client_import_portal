@@ -45,7 +45,7 @@ class ImportController extends Controller
                 'errors' => ['category' => __('Category not found')] 
             ]);
         }
-        $result = $this->customerService->import($file, $category, $fields, $includeFirstRow);
+        $result = $this->customerService->import($file, $category->id, $fields, $includeFirstRow);
         return response()->json([
             'success' => true,
             'message' => __("Imported :total records", [ 'total' => $result])

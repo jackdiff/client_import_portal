@@ -7,4 +7,5 @@ interface CustomerServiceInterface
     public function getFieldStyles();
     public function list($params);
     public function import($file, $category, $fields, $includeFirstRow);
+    public function getWorksheetData($file);
 }

@@ -39,37 +39,35 @@ class CustomerService implements CustomerServiceInterface
         ];
     }
 
-    public function import($file, $category, $fields, $includeFirstRow) {
-        $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($file);
-        $worksheets = $spreadsheet->getAllSheets();
+    public function import($file, $category_id, $fields, $includeFirstRow) {
+        $sheetDatas = $this->getWorksheetData($file);
         $toSave = [];
-        foreach($worksheets as $ws) {
+        foreach($sheetDatas as $ws) {
             $count = 0;
             $structure = [];
-            $sheet = $ws->getTitle();
+            $sheet = $ws['title'];
             $wsFields = @$fields[$sheet];
             if(empty($wsFields)) {
                 continue;
             }
-            foreach ($ws->getRowIterator() as $row) {
+            foreach ($ws['rows'] as $row) {
                 $count++;
                 if($count <= 1 && boolval($includeFirstRow) !== true) {
                     //1st row is header
                     continue;
                 }
-                $cellIterator = $row->getCellIterator();
-                $cellIterator->setIterateOnlyExistingCells(false);
-                $line = [];
+                $line = $this->makeRecordTemplate();
+                $isEmpty = true;
                 $i = 0;
-                foreach ($cellIterator as $cell) {
-                    $val = trim((string)$cell->getCalculatedValue());
+                foreach ($row as $cell) {
                     if(!empty(@$wsFields[$i])) {
-                        $line[@$wsFields[$i]] =  !empty($val) ? $val : null;
+                        $isEmpty = false;
+                        $line[@$wsFields[$i]] =  $cell;
                     }
                     $i++;
                 }
-                if(!empty($line)) {
-                    $line['category_id'] = $category->id;
+                if(!$isEmpty) {
+                    $line['category_id'] = $category_id;
                     $line['sheet_source'] = $sheet;
                     array_push($toSave, $line);
                 }
@@ -82,6 +80,40 @@ class CustomerService implements CustomerServiceInterface
         }
         return $record_count;
     }
+
+    public function getWorksheetData($file) {
+        $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($file);
+        $worksheets = $spreadsheet->getAllSheets();
+
+        $data = [];
+        foreach($worksheets as $ws) {
+            $sheet = $ws->getTitle();
+            $sheetData = [
+                'title' => $sheet,
+                'rows' => []
+            ];
+            foreach ($ws->getRowIterator() as $row) {
+                $cellIterator = $row->getCellIterator();
+                $cellIterator->setIterateOnlyExistingCells(false);
+                $tmp = [];
+                $isEmpty = true;
+                foreach ($cellIterator as $cell) {
+                    $val = trim((string)$cell->getCalculatedValue());
+                    if(!empty($val)) {
+                        $tmp[] = $val;
+                        $isEmpty = false;
+                    } else {
+                        $tmp[] = null;
+                    }
+                }
+                if(!empty($tmp) && !$isEmpty) {
+                    $sheetData['rows'][] = $tmp;
+                }
+            }
+            $data[] = $sheetData;
+        }
+        return $data;
+    } 
 
     public function list($params) {
         $query = DB::table('customers');
@@ -99,5 +131,14 @@ class CustomerService implements CustomerServiceInterface
         }
 
         return $query->paginate($this->PAGE_SIZE, ['*'], 'page', $params['page'])->toArray();
+    }
+
+    private function makeRecordTemplate() {
+        $standardFields = $this->getFields();
+        $tmp = [];
+        foreach ($standardFields as $key => $value) {
+            $tmp[$key] = null;
+        }
+        return $tmp;
     }
 }
